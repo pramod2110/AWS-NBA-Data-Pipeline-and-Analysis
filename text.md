@@ -18,29 +18,43 @@ This project is a **hands-on, end-to-end tutorial** that demonstrates how to:
 ---
 
 ## Table of Contents
+
 - [1. Project Goal](#1-project-goal)
 - [2. What You Will Learn](#2-what-you-will-learn)
 - [3. Repository Structure](#3-repository-structure)
 - [4. Prerequisites](#4-prerequisites)
 - [5. Download the Dataset from Kaggle](#5-download-the-dataset-from-kaggle)
-- [6. OpenRefine for Data Cleaning](#6-openrefine-for-data-cleaning)
+- [6. Data Cleaning and Feature Engineering with OpenRefine](#6-data-cleaning-and-feature-engineering-with-openrefine)
   - [6.1 What is OpenRefine?](#61-what-is-openrefine)
   - [6.2 Create an OpenRefine Project](#62-create-an-openrefine-project)
-  - [6.3 Apply the OpenRefine Recipe](#63-apply-the-openrefine-recipe)
+  - [6.3 Apply the OpenRefine Recipe (API)](#63-apply-the-openrefine-recipe-api)
   - [6.4 Export the Cleaned Dataset](#64-export-the-cleaned-dataset)
 - [7. Cleaned Dataset Schema](#7-cleaned-dataset-schema)
-- [8. Baseline Models](#8-baseline-models)
-- [9. DistilBERT Fine-Tuning](#9-distilbert-fine-tuning)
-  - [9.1 Why DistilBERT?](#91-why-distilbert)
-  - [9.2 Training Configuration](#92-training-configuration)
-  - [9.3 W&B Tracking + Checkpoints](#93-wb-tracking--checkpoints)
-- [10. Docker: Run Everything Locally](#10-docker-run-everything-locally)
-- [11. End-to-End Workflow](#11-end-to-end-workflow)
-- [12. Model Performance Comparison](#12-model-performance-comparison)
-- [13. Troubleshooting](#13-troubleshooting)
-- [14. Notes, Caveats, and Future Work](#14-notes-caveats-and-future-work)
-
----
+- [8. DistilBERT Fine-Tuning for Sentiment Classification](#8-distilbert-fine-tuning-for-sentiment-classification)
+  - [8.1 Why DistilBERT?](#81-why-distilbert)
+  - [8.2 Input Representation](#82-input-representation)
+  - [8.3 Training Configuration](#83-training-configuration)
+  - [8.4 Experiment Tracking with Weights--Biases-wb](#84-experiment-tracking-with-weights--biases-wb)
+  - [8.5 Model Checkpoints and Outputs](#85-model-checkpoints-and-outputs)
+  - [8.6 Evaluation](#86-evaluation)
+- [9. Baseline Machine Learning Models (Comparative Analysis)](#9-baseline-machine-learning-models-comparative-analysis)
+  - [9.1 Motivation for Baseline Comparison](#91-motivation-for-baseline-comparison)
+  - [9.2 Feature Representation](#92-feature-representation)
+  - [9.3 Models Implemented](#93-models-implemented)
+  - [9.4 Training and Evaluation](#94-training-and-evaluation)
+- [10. Model Performance Comparison](#10-model-performance-comparison)
+  - [10.1 Evaluation Metrics](#101-evaluation-metrics)
+  - [10.2 Performance Summary](#102-performance-summary)
+  - [10.3 Discussion](#103-discussion)
+- [11. Running the Project Locally with Docker](#11-running-the-project-locally-with-docker)
+  - [11.1 Why Docker?](#111-why-docker)
+  - [11.2 Build the Docker Image](#112-build-the-docker-image)
+  - [11.3 Run the Docker Container](#113-run-the-docker-container)
+  - [11.4 Stopping the Container](#114-stopping-the-container)
+- [12. End-to-End Workflow](#12-end-to-end-workflow)
+  - [12.1 Workflow Overview](#121-workflow-overview)
+  - [12.2 Pipeline Diagram](#122-pipeline-diagram)
+  - [12.3 Reproducibility](#123-reproducibility)
 
 ## 1. Project Goal
 
@@ -1240,7 +1254,7 @@ From here, you can run:
 - models/bert_model.ipynb
 
 ---
-### 11.5 Stopping the Container
+### 11.4 Stopping the Container
 
 To stop the container:
 ``` {text}
@@ -1283,24 +1297,33 @@ The project follows the steps below:
 ### 12.2 Pipeline Diagram
 
 ```mermaid
-flowchart TD
-    A[Download Sentiment140 Dataset (Kaggle)]
-    B[OpenRefine: Import Raw CSV]
-    C[Apply Cleaning and Feature Engineering Recipe]
-    D[Export Cleaned CSV]
-    E[Load Data in Python]
-    F[Fine-tune DistilBERT Model]
-    G[Train Baseline ML Models]
-    H[Evaluate Models]
-    I[Compare Results]
+flowchart TD;
+A[Download Sentiment140 Dataset - Kaggle];
+B[OpenRefine - Import Raw CSV];
+C[Apply Cleaning and Feature Engineering Recipe];
+D[Export Cleaned CSV];
+E[Load Data in Python];
+F[Fine-tune DistilBERT Model];
+G[Train Baseline ML Models];
+H[Evaluate Models];
+I[Compare Results];
 
-    A[Start] --> B{Decision}
-    B --> C
-    C --> D
-    D --> E
-    E --> F
-    F --> H
-    H --> I
-    E --> G
-    G --> H
+A --> B;
+B --> C;
+C --> D;
+D --> E;
+E --> F;
+E --> G;
+F --> H;
+G --> H;
+H --> I;
 ```
+
+### 12.3 Reproducibility
+
+- All preprocessing steps are captured in a reproducible OpenRefine JSON recipe
+- All modeling experiments are executed inside a Docker container
+- Notebooks can be run end-to-end using **Restart and Run All**
+- The workflow adheres to course guidelines requiring local execution
+
+This structured pipeline ensures that results can be reliably reproduced and extended.
